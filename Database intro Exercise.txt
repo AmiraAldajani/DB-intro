@@ -1,0 +1,51 @@
+create database store;
+use store;
+create table countries(
+    id int primary key AUTO_INCREMENT ,
+    name varchar(15) unique ,
+    continent_name varchar(15) not null
+);
+
+CREATE table users(
+    id int primary key auto_increment ,
+    email varchar(20) unique ,
+    gender char(1) check ( gender= 'f' OR gender ='m') ,
+    country_id int ,
+    foreign key (country_id) references countries(id)
+);
+
+create table products(
+    id int primary key auto_increment ,
+    price int default 0 ,
+    name varchar(10) not null ,
+    status varchar(7) check ( status= 'valid' OR status= 'expired')
+);
+
+create table orders(
+    id int primary key auto_increment,
+    status varchar(6) check (status='start' OR status='finish') ,
+    user_id int ,
+    foreign key (user_id) references users(id)
+);
+
+CREATE TABLE order_products(
+    id int primary key auto_increment ,
+    quantity int default 0 ,
+    order_id int ,
+    product_id int ,
+    foreign key (order_id) references orders(id) ,
+    foreign key (product_id) references products(id)
+);
+
+#DML
+insert into countries (name, continent_name) values ('Saudi arabia', 'Asia');
+insert into users (email, gender,country_id) values ('sara@gmail.com', 'f', 1);
+insert into orders (status, user_id) values ('start', 1);
+insert into products (price, name, status) values (250, 'keyboard', 'valid');
+insert into products (price, name, status) values (75, 'mouse', 'expired');
+insert into order_products (quantity, order_id, product_id) values (2, 1, 1);
+UPDATE countries SET name = 'Saudi arabia' WHERE id = 1;
+DELETE FROM products WHERE id = 2;
+alter table countries add column created_at datetime default current_timestamp;
+insert into countries (name, continent_name) values ('Egypt', 'Africa');
+select * from countries;
